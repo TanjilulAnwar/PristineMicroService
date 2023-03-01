@@ -42,7 +42,7 @@ namespace APIGateway
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+          //  app.UseHttpsRedirection();
             app.UseAuthorization();
 
             app.UseOcelot();
