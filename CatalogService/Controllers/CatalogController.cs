@@ -19,16 +19,16 @@ namespace CatalogService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> Get()
+        public  IEnumerable<Product> Get()
         {
             return _db.Products.ToList();
         }
 
         //GET:api/catalog/5
         [HttpGet("{id}" , Name ="Get")]
-        public Product Get(int id)
+        public async Task<Product> Get(int id)
         {
-            return _db.Products.Find(id);
+            return await _db.Products.FindAsync(id);
         }
 
         //POST:api/catalog
@@ -37,7 +37,7 @@ namespace CatalogService.Controllers
         {
             try
             {
-                _db.Products.Add(product);
+                await _db.Products.AddAsync(product);
                 await _db.SaveChangesAsync();
                 return StatusCode(StatusCodes.Status201Created, product);
             }
