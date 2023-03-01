@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CatalogService.Database;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,16 @@ namespace CatalogService.Controllers
     [ApiController]
     public class CatalogController : ControllerBase
     {
+        DatabaseContext _db;
+        public CatalogController(DatabaseContext db)
+        {
+            _db = db;
+        }
+
+        public IEnumerable<Product> GetProducts()
+        {
+            return _db.Products.ToList();
+        }
+
     }
 }
