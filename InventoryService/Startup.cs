@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,7 +27,25 @@ namespace InventoryService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<OrderConsumer>();
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    var uri = new Uri(Configuration["ServiceBus:Uri"]);
+                    cfg.Host(uri, host =>
+                    {
+                        host.Username(Configuration["ServiceBus:Username"]);
+                        host.Password(Configuration["ServiceBus:Password"]);
+                    });
+                    //exchange
+                    cfg.ReceiveEndpoint(Configuration["ServiceBus:Queue"], c =>
+                     {
+                         c.ConfigureConsumer<OrderConsumer>(ctx);
+                     });
+                });
+            });
+            services.AddMassTransitHostedService(true);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
