@@ -18,6 +18,7 @@ namespace CatalogService.Controllers
             _db = db;
         }
 
+        [HttpGet]
         public IEnumerable<Product> GetProducts()
         {
             return _db.Products.ToList();
