@@ -1,4 +1,5 @@
 using CatalogService.Database;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,24 @@ namespace CatalogService
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+
+            services.AddMassTransit(x =>
+            {
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+                 {
+                   //  config.UseHealthCheck(provider);
+                     config.Host(new Uri(Configuration["ServiceBus:Uri"]), host =>
+                     {
+                         host.Username(Configuration["ServiceBus:Username"]);
+                         host.Password(Configuration["ServiceBus:Password"]);
+                     });
+                 }));
+            
+            });
+            services.AddMassTransitHostedService();
+
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
