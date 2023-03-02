@@ -29,7 +29,9 @@ namespace CatalogService.Controllers
             if(product!= null)
             {
                 product.AddedOnDate = DateTime.Now;
-                Uri uri = new Uri(_configuration.GetValue<string>("ServiceBus:Uri"));
+
+                //publisher
+                Uri uri = new Uri(_configuration.GetValue<string>("ServiceBus:Queue"));
                 var endPoint = await _busService.GetSendEndpoint(uri);
                 await endPoint.Send(product);
                 return "true";

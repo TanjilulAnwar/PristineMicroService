@@ -13,23 +13,14 @@ namespace OrderService.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        IPublishEndpoint _publishEndpoint { get; set; }
+       
 
-        public OrderController(IPublishEndpoint publishEndpoint)
+        public OrderController()
         {
-            _publishEndpoint = publishEndpoint;
+         
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateOrder(Order order)
-        {
-          
-            await _publishEndpoint.Publish<Order>(order);
-            return Ok();
-
-            
-        }
-
+       
 
     }
 }

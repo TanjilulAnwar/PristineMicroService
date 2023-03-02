@@ -1,3 +1,6 @@
+using CustomerService.Consumers;
+using GreenPipes;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,7 +29,29 @@ namespace CustomerService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<ProductConsumer>();
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+                {
+                    //  config.UseHealthCheck(provider);
+                    config.Host(new Uri(Configuration["ServiceBus:Uri"]), host =>
+                    {
+                        host.Username(Configuration["ServiceBus:Username"]);
+                        host.Password(Configuration["ServiceBus:Password"]);
+                    });
 
+                    config.ReceiveEndpoint("productQueue", oq =>
+                    {
+                        oq.PrefetchCount = 20;
+                        oq.UseMessageRetry(r => r.Interval(2, 100));
+                        oq.ConfigureConsumer <ProductConsumer>(provider);
+
+                    });
+                }));
+
+            });
+            services.AddMassTransitHostedService(); 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

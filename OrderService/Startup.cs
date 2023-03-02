@@ -27,19 +27,7 @@ namespace OrderService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMassTransit(config =>
-            {
-                config.UsingRabbitMq((ctx, cfg) =>
-                {
-                    var uri = new Uri(Configuration["ServiceBus:Uri"]);
-                    cfg.Host(uri, host =>
-                    {
-                        host.Username(Configuration["ServiceBus:Username"]);
-                        host.Password(Configuration["ServiceBus:Password"]);
-                    });
-                });
-            });
-            services.AddMassTransitHostedService(true);
+ 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
