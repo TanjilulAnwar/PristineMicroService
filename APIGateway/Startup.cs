@@ -26,6 +26,19 @@ namespace APIGateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOcelot();
+            var allowOrigins = Configuration.GetValue<string>("AllowOrigins");
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("_myAllowSpecificOrigins",
+                    builder =>
+                    {
+                        builder.WithOrigins(allowOrigins)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,10 +55,20 @@ namespace APIGateway
                 app.UseHsts();
             }
 
-          //  app.UseHttpsRedirection();
-            app.UseAuthorization();
+             app.UseHttpsRedirection();
+            // app.UseAuthorization();
+
+            app.UseRouting();
+
+            //app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseOcelot();
+
            
         }
     }
