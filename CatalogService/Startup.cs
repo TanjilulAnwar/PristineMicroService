@@ -1,3 +1,5 @@
+using CatalogService.Commands.Handlers;
+using CatalogService.Commands.Inerfaces;
 using CatalogService.Database;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -50,7 +52,7 @@ namespace CatalogService
             });
             services.AddMassTransitHostedService();
 
-
+            services.AddScoped<IProductCommand, ProductCommand>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -66,6 +68,7 @@ namespace CatalogService
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CatalogService v1"));
+
             }
 
             app.UseHttpsRedirection();
