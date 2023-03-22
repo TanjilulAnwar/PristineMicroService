@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Shared.Models\Shared.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
-
 </Project>

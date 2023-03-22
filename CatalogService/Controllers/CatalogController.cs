@@ -1,6 +1,7 @@
 ﻿using CatalogService.Commands.Inerfaces;
 using CatalogService.Database;
 using CatalogService.Models;
+using CatalogService.Queries.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,28 +17,16 @@ namespace CatalogService.Controllers
     public class CatalogController : ControllerBase
     {
         private IProductCommand _productCommand;
-
-        public CatalogController(IProductCommand productCommand)
+        private IProductQueries _productQueries;
+        public CatalogController(IProductCommand productCommand, IProductQueries productQueries)
         {
             _productCommand = productCommand;
+            _productQueries = productQueries;
         }
-
-        //[HttpGet]
-        //public  IEnumerable<Product> Get()
-        //{
-        //    return _db.Products.ToList();
-        //}
-
-        //GET:api/catalog/5
-        //[HttpGet("{id}" , Name ="Get")]
-        //public async Task<Product> Get(int id)
-        //{
-        //    return await _db.Products.FindAsync(id);
-        //}
 
 
         [HttpPost]
-        public async Task<IActionResult> Add(ProductModel model)
+        public async Task<ActionResult> Add(ProductModel model)
         {
             try
             {
@@ -52,7 +41,7 @@ namespace CatalogService.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(ProductModel model)
+        public async Task<ActionResult> Update(ProductModel model)
         {
             try
             {
@@ -69,7 +58,7 @@ namespace CatalogService.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<ActionResult> Delete(int Id)
         {
             try
             {
@@ -87,10 +76,19 @@ namespace CatalogService.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<string>> Get()
+        public async Task<ActionResult<ProductModel>> Get(int Id)
         {
-            return "Hello boss";
+            return await _productQueries.GetProductAsync(Id);
         }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<ProductModel>> GetAll()
+        {
+            return Ok(_productQueries.GetAllProduct());
+        } 
 
     }
 }
+
+//ocelot gateway call
+//http://localhost:49932/catalog/api/Catalog/getall
