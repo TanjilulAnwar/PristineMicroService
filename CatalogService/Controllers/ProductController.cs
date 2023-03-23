@@ -14,17 +14,37 @@ namespace CatalogService.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CatalogController : ControllerBase
+    public class ProductController : ControllerBase
     {
         private IProductCommand _productCommand;
         private IProductQueries _productQueries;
-        public CatalogController(IProductCommand productCommand, IProductQueries productQueries)
+
+        public ProductController(IProductCommand productCommand, IProductQueries productQueries)
         {
             _productCommand = productCommand;
             _productQueries = productQueries;
         }
 
+        //ocelot gateway call
+        //ocelot Base Url:http://localhost:49932
+        /*
+         * /catalog/api/product/getall
+         * /catalog/api/product/get?Id=
+         * /catalog/api/product/add
+         * /catalog/api/product/update
+         * /catalog/api/product/delete?id=
+         */
 
+        [HttpGet]
+        public async Task<ActionResult<ProductModel>> Get(int Id)
+        {
+            return await _productQueries.GetProductAsync(Id);
+        }
+        [HttpGet]
+        public ActionResult<IEnumerable<ProductModel>> GetAll()
+        {
+            return Ok(_productQueries.GetAllProduct());
+        }
         [HttpPost]
         public async Task<ActionResult> Add(ProductModel model)
         {
@@ -39,7 +59,6 @@ namespace CatalogService.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
-
         [HttpPut]
         public async Task<ActionResult> Update(ProductModel model)
         {
@@ -56,7 +75,6 @@ namespace CatalogService.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
-
         [HttpDelete]
         public async Task<ActionResult> Delete(int Id)
         {
@@ -75,20 +93,6 @@ namespace CatalogService.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<ActionResult<ProductModel>> Get(int Id)
-        {
-            return await _productQueries.GetProductAsync(Id);
-        }
-
-        [HttpGet]
-        public ActionResult<IEnumerable<ProductModel>> GetAll()
-        {
-            return Ok(_productQueries.GetAllProduct());
-        } 
-
     }
 }
 
-//ocelot gateway call
-//http://localhost:49932/catalog/api/Catalog/getall
