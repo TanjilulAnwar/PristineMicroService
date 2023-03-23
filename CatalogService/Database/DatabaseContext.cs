@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CatalogService.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Database
 {

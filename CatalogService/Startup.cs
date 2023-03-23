@@ -1,8 +1,4 @@
-using CatalogService.Commands.Handlers;
-using CatalogService.Commands.Inerfaces;
 using CatalogService.Database;
-using CatalogService.Queries.Handlers;
-using CatalogService.Queries.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,8 +27,8 @@ namespace CatalogService
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-
-
+            // services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+            services.AddApplication();
             services.AddMassTransit(x =>
             {
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
@@ -47,8 +43,6 @@ namespace CatalogService
             
             });
             services.AddMassTransitHostedService();
-            services.AddScoped<IProductQueries, ProductQueries>();
-            services.AddScoped<IProductCommand, ProductCommand>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

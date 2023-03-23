@@ -1,5 +1,4 @@
-﻿
-namespace CatalogService.Database
+﻿namespace CatalogService.Models
 {
     public class Product
     {

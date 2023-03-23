@@ -1,13 +1,10 @@
-﻿using CatalogService.Commands.Inerfaces;
-using CatalogService.Database;
+﻿using CatalogService.Application.Commands;
+using CatalogService.Application.Queries;
 using CatalogService.Models;
-using CatalogService.Queries.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CatalogService.Controllers
@@ -16,13 +13,11 @@ namespace CatalogService.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private IProductCommand _productCommand;
-        private IProductQueries _productQueries;
+        private IMediator Mediator;
 
-        public ProductController(IProductCommand productCommand, IProductQueries productQueries)
+        public ProductController(IMediator mediator)
         {
-            _productCommand = productCommand;
-            _productQueries = productQueries;
+            Mediator = mediator;
         }
 
         //ocelot gateway call
@@ -38,58 +33,27 @@ namespace CatalogService.Controllers
         [HttpGet]
         public async Task<ActionResult<ProductModel>> Get(int Id)
         {
-            return await _productQueries.GetProductAsync(Id);
+           return Ok(await Mediator.Send(new GetProductDetailQuery() { Id = Id }));
         }
         [HttpGet]
-        public ActionResult<IEnumerable<ProductModel>> GetAll()
+        public async Task<ActionResult<IEnumerable<ProductModel>>> GetAll()
         {
-            return Ok(_productQueries.GetAllProduct());
+            return Ok(await Mediator.Send(new GetAllProductsQuery()));
         }
         [HttpPost]
-        public async Task<ActionResult> Add(ProductModel model)
+        public async Task<ActionResult<ProductModel>> Add(AddProductCommand command)
         {
-            try
-            {
-                var product = await _productCommand.AddProductAsync(model);
-                return StatusCode(StatusCodes.Status201Created, product);
-            }
-
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            return Ok(await Mediator.Send(command));
         }
         [HttpPut]
-        public async Task<ActionResult> Update(ProductModel model)
+        public async Task<ActionResult> Update(UpdateProductCommand command)
         {
-            try
-            {
-                var updateSuccess = await _productCommand.UpsertProductAsync(model);
-                if (updateSuccess)
-                    return StatusCode(StatusCodes.Status200OK);
-                return StatusCode(StatusCodes.Status304NotModified);
-            }
-
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            return Ok(await Mediator.Send(command));
         }
         [HttpDelete]
         public async Task<ActionResult> Delete(int Id)
         {
-            try
-            {
-                var deleteSuccess = await _productCommand.DeleteProductAsync(Id);
-                if (deleteSuccess)
-                    return StatusCode(StatusCodes.Status200OK);
-                return StatusCode(StatusCodes.Status304NotModified);
-            }
-
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            return Ok(await Mediator.Send(new DeleteProductCommand() { Id = Id }));
         }
 
 
