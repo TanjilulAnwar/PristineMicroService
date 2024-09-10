@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "OrderServic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryService", "InventoryService\InventoryService.csproj", "{69FF47C2-DF86-4A9A-BCE0-E9144E5B57F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerService", "CustomerService\CustomerService.csproj", "{C92A8327-531D-4352-A260-C3D95869E5EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerService", "CustomerService\CustomerService.csproj", "{C92A8327-531D-4352-A260-C3D95869E5EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Models", "Shared.Models\Shared.Models.csproj", "{D66F6127-E546-4053-9848-33C6A7C27A64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Models", "Shared.Models\Shared.Models.csproj", "{D66F6127-E546-4053-9848-33C6A7C27A64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{064F09D9-699F-40AA-9000-CFCE36603A17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{D66F6127-E546-4053-9848-33C6A7C27A64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D66F6127-E546-4053-9848-33C6A7C27A64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D66F6127-E546-4053-9848-33C6A7C27A64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{064F09D9-699F-40AA-9000-CFCE36603A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{064F09D9-699F-40AA-9000-CFCE36603A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{064F09D9-699F-40AA-9000-CFCE36603A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{064F09D9-699F-40AA-9000-CFCE36603A17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
